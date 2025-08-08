@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import {
@@ -17,7 +17,7 @@ import * as Icons from "lucide-react";
 const sortGroups = {
   date: ["date-desc", "date-asc"],
   amount: ["amount-desc", "amount-asc"],
-  description: ["desc-asc", "desc-desc"]
+  description: ["desc-asc", "desc-desc"],
 };
 
 export default function FilterPanel() {
@@ -40,26 +40,40 @@ export default function FilterPanel() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Khoảng số tiền</label>
+          <label className="block text-sm font-medium mb-2">
+            Khoảng số tiền
+          </label>
           <div className="flex gap-2">
             <input
               type="text"
               inputMode="decimal"
               placeholder="Tối thiểu"
-              value={filters.minAmount ?? ''}
-              onChange={(e) => dispatch(setMinAmount(
-                e.target.value === '' || isNaN(Number(e.target.value)) ? null : Number(e.target.value)
-              ))}
+              value={filters.minAmount ?? ""}
+              onChange={(e) =>
+                dispatch(
+                  setMinAmount(
+                    e.target.value === "" || isNaN(Number(e.target.value))
+                      ? null
+                      : Number(e.target.value)
+                  )
+                )
+              }
               className="w-1/2 p-2 border rounded bg-white dark:bg-gray-900"
             />
             <input
               type="text"
               inputMode="decimal"
               placeholder="Tối đa"
-              value={filters.maxAmount ?? ''}
-              onChange={(e) => dispatch(setMaxAmount(
-                e.target.value === '' || isNaN(Number(e.target.value)) ? null : Number(e.target.value)
-              ))}
+              value={filters.maxAmount ?? ""}
+              onChange={(e) =>
+                dispatch(
+                  setMaxAmount(
+                    e.target.value === "" || isNaN(Number(e.target.value))
+                      ? null
+                      : Number(e.target.value)
+                  )
+                )
+              }
               className="w-1/2 p-2 border rounded bg-white dark:bg-gray-900"
             />
           </div>
@@ -70,14 +84,22 @@ export default function FilterPanel() {
           <div className="flex gap-2">
             <input
               type="date"
-              value={filters.dateRange?.[0] ?? ''}
-              onChange={(e) => dispatch(setDateRange([e.target.value, filters.dateRange?.[1] ?? '']))}
+              value={filters.dateRange?.[0] ?? ""}
+              onChange={(e) =>
+                dispatch(
+                  setDateRange([e.target.value, filters.dateRange?.[1] ?? ""])
+                )
+              }
               className="w-1/2 p-2 border rounded bg-white dark:bg-gray-900"
             />
             <input
               type="date"
-              value={filters.dateRange?.[1] ?? ''}
-              onChange={(e) => dispatch(setDateRange([filters.dateRange?.[0] ?? '', e.target.value]))}
+              value={filters.dateRange?.[1] ?? ""}
+              onChange={(e) =>
+                dispatch(
+                  setDateRange([filters.dateRange?.[0] ?? "", e.target.value])
+                )
+              }
               className="w-1/2 p-2 border rounded bg-white dark:bg-gray-900"
             />
           </div>
@@ -90,7 +112,12 @@ export default function FilterPanel() {
         <div className="flex flex-wrap gap-3">
           {categories.map((c) => {
             const selected = filters.categories.includes(c.name);
-            const Icon = Icons[c.icon as keyof typeof Icons];
+            const Icon = Icons[
+              c.icon as keyof typeof Icons
+            ] as React.ComponentType<{
+              size?: number;
+              className?: string;
+            }>;
 
             return (
               <button
@@ -102,12 +129,16 @@ export default function FilterPanel() {
                   dispatch(setCategories(updated));
                 }}
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-sm border transition
-                  ${selected
-                    ? `bg-${c.color.replace("500", "100")} text-${c.color} border-${c.color}`
-                    : `bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600`}
+                  ${
+                    selected
+                      ? `bg-${c.color.replace("500", "100")} text-${
+                          c.color
+                        } border-${c.color}`
+                      : `bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600`
+                  }
                   hover:scale-105 hover:shadow`}
               >
-                <Icon size={16} className={`text-${c.color}`} />
+                {Icon && <Icon size={16} className={`text-${c.color}`} />}
                 {c.name}
               </button>
             );
@@ -123,7 +154,11 @@ export default function FilterPanel() {
             {Object.entries(sortGroups).map(([group, options]) => (
               <div key={group} className="flex items-center gap-2">
                 <span className="text-xs text-gray-500">
-                  {group === 'date' ? 'Ngày:' : group === 'amount' ? 'Số tiền:' : 'Mô tả:'}
+                  {group === "date"
+                    ? "Ngày:"
+                    : group === "amount"
+                    ? "Số tiền:"
+                    : "Mô tả:"}
                 </span>
                 {options.map((value) => (
                   <button
@@ -131,15 +166,21 @@ export default function FilterPanel() {
                     onClick={() => dispatch(setSortOption(value))}
                     className={`px-3 py-1 text-sm rounded-sm border transition ${
                       filters.sortOption === value
-                        ? 'bg-pink-100 text-pink-600 border-pink-400'
-                        : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600'
+                        ? "bg-pink-100 text-pink-600 border-pink-400"
+                        : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600"
                     }`}
                   >
-                    {value === 'date-desc' ? 'Mới nhất' :
-                     value === 'date-asc' ? 'Cũ nhất' :
-                     value === 'amount-desc' ? 'Giảm dần' :
-                     value === 'amount-asc' ? 'Tăng dần' :
-                     value === 'desc-asc' ? 'A → Z' : 'Z → A'}
+                    {value === "date-desc"
+                      ? "Mới nhất"
+                      : value === "date-asc"
+                      ? "Cũ nhất"
+                      : value === "amount-desc"
+                      ? "Giảm dần"
+                      : value === "amount-asc"
+                      ? "Tăng dần"
+                      : value === "desc-asc"
+                      ? "A → Z"
+                      : "Z → A"}
                   </button>
                 ))}
               </div>
