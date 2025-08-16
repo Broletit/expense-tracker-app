@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 
 type State = {
   items: Expense[];
+  loading: boolean;
+  error: string | null;
 };
 
 const initialState: State = {
