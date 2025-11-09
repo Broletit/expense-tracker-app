@@ -9,8 +9,7 @@
     "lint": "next lint",
     "tailwind:init": "tailwindcss init -p",
     "db:reset": "rimraf database/app.sqlite && sqlite3 database/app.sqlite < database/schema.sql",
-    "db:init": "sqlite3 database/app.sqlite < database/schema.sql",
-    "db:build": "tsx scripts/build-db.ts"
+    "db:init": "sqlite3 database/app.sqlite < database/schema.sql"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
