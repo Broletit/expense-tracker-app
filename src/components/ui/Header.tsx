@@ -1,136 +1,112 @@
 'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { toggleTheme } from "../../features/theme/themeSlice";
-import {
-  Moon,
-  Sun,
-  LayoutDashboard,
-  Wallet,
-  BarChart,
-  Calendar,
-  FileBarChart2,
-  Menu,
-  X,
-} from "lucide-react";
-
-const navItems = [
-  { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/expenses", label: "Chi tiêu", icon: Wallet },
-  { href: "/stats", label: "Thống kê", icon: BarChart },
-  { href: "/analytics", label: "Báo cáo", icon: FileBarChart2 },
-];
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import HeaderUser from '@/components/ui/HeaderUser';
 
 export default function Header() {
   const pathname = usePathname();
-  const dispatch = useAppDispatch();
-  const darkMode = useAppSelector((state) => state.theme.darkMode);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const toggle = () => {
-    dispatch(toggleTheme());
-    if (typeof window !== "undefined") {
-      localStorage.setItem("darkMode", (!darkMode).toString());
-    }
-    document.documentElement.classList.toggle("dark");
-  };
+  const nav = [
+    { href: '/dashboard', label: 'Tổng quan' },
+    { href: '/expenses', label: 'Chi tiêu' },
+    { href: '/categories', label: 'Danh mục' },
+    { href: '/reports', label: 'Báo cáo' },
+    { href: '/budgets', label: 'Ngân sách' },
+  ];
+
+  const isActive = (href: string) =>
+    pathname === href || pathname?.startsWith(href + '/');
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b dark:border-gray-700">
-      <div className="w-full max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-        <div
-          className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat opacity-20 dark:opacity-10"
-          style={{ backgroundImage: "url('/bg.jpg')" }}
-        />
+    <header className="w-full border-b bg-transparent transition-[background-color,color,border-color] duration-500 ease-in-out">
+      <div className="w-full max-w-screen-2xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center">
-          <Image
+        <Link
+          href="/"
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+          aria-label="Trang chủ Expense Tracker"
+        >
+          <img
             src="/logo.png"
-            alt="Logo"
-            width={180}
-            height={120}
-            className="hover:opacity-80 transition"
+            alt="Expense Tracker Logo"
+            className="h-16 max-h-16 w-auto object-contain drop-shadow-md"
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-8">
-          {navItems.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`flex flex-col items-center px-4 py-2 rounded-lg border border-transparent 
-                hover:bg-blue-50 dark:hover:bg-gray-800 
-                hover:border-blue-300 dark:hover:border-blue-500 transition-all group
-                ${
-                  pathname === href
-                    ? "text-blue-600 dark:text-blue-400 border border-blue-400 dark:border-blue-500 bg-blue-200 dark:bg-gray-800"
-                    : "text-gray-700 dark:text-gray-300"
-                }`}
-            >
-              <Icon className="w-6 h-6 mb-1 group-hover:scale-110 transition-transform" />
-              <span className="text-base font-semibold tracking-wide uppercase">
-                {label}
-              </span>
-            </Link>
-          ))}
+
+        {/* Nav desktop */}
+        <nav className="hidden md:flex items-center gap-4 sm:gap-6">
+          {nav.map((l) => {
+            const active = isActive(l.href);
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`text-sm font-medium px-3 py-1.5 rounded-md transition-colors duration-300
+                  ${
+                    active
+                      ? 'bg-blue-100 text-blue-700 dark:bg-gray-700 dark:text-white'
+                      : 'text-gray-800 hover:text-blue-700 dark:text-gray-200 dark:hover:text-white'
+                  }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </nav>
 
-
-        {/* Dark mode & mobile menu */}
-        <div className="flex items-center gap-3">
-          {/* Mobile menu toggle */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+        {/* Right: user + hamburger */}
+        <div className="flex items-center gap-2">
+          <div className="hidden md:block">
+            <HeaderUser />
           </div>
-
-          {/* Dark Mode toggle */}
           <button
-            onClick={toggle}
-            title={darkMode ? "Chế độ sáng" : "Chế độ tối"}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="md:hidden p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10 transition-colors duration-300"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Mở menu"
           >
-            {darkMode ? (
-              <Sun size={20} className="text-yellow-500" />
-            ) : (
-              <Moon size={20} className="text-gray-600" />
-            )}
+            {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden px-4 pb-4 border-t dark:border-gray-700 bg-white dark:bg-gray-900">
-          <nav className="flex flex-col gap-2">
-            {navItems.map(({ href, label, icon: Icon }) => (
+      <div
+        className={`md:hidden border-t border-black/10 dark:border-white/10 overflow-hidden
+                    transition-[max-height,opacity] duration-500 ease-in-out
+                    ${
+                      open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    } bg-transparent`}
+      >
+        <nav className="flex flex-col px-6 py-3 space-y-2">
+          {nav.map((l) => {
+            const active = isActive(l.href);
+            return (
               <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-3 px-4 py-2 rounded-md transition-all group
-                ${
-                  pathname === href
-                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-gray-800"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-                onClick={() => setMenuOpen(false)}
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors duration-300
+                  ${
+                    active
+                      ? 'bg-blue-100 text-blue-700 dark:bg-gray-700 dark:text-white'
+                      : 'text-gray-800 hover:bg.black/5 dark:text-gray-200 dark:hover:bg.white/10'
+                  }`}
               >
-                <Icon className="w-5 h-5" />
-                <span className="text-base font-medium">{label}</span>
+                {l.label}
               </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+            );
+          })}
+
+          <div className="pt-2">
+            <HeaderUser />
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

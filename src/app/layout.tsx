@@ -1,29 +1,32 @@
-import "../style/globals.css";
-import Providers from "./providers";
-import Header from "../components/ui/Header";
-import Footer from "../components/ui/Footer";
+import './globals.css';
+import Providers from './providers';
+import Header from '@/components/ui/Header';
+import GlobalTopLoader from '@/components/layout/GlobalTopLoader';
 
 export const metadata = {
-  title: "Expense Tracker",
-  description: "Ứng dụng theo dõi chi tiêu cá nhân",
+  title: 'Expense Tracker',
+  description: 'Next.js + SQLite + React Query + Recharts',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className="scroll-smooth">
-      <body className="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
-        
+    <html lang="vi" suppressHydrationWarning>
+      <body
+        className="w-full min-h-screen overflow-x-hidden
+                   transition-colors duration-500 ease-in-out
+                   bg-gray-50 text-gray-900
+                   dark:bg-gray-900 dark:text-gray-100"
+      >
         <Providers>
+          {/*  Thanh loading toàn cục, dựa trên React Query */}
+          <GlobalTopLoader />
+
           <Header />
 
-         <main className="flex-1 flex justify-center px-4 md:px-4 py-8 md:py-6">
-            <div className="w-full max-w-8xl px-4 sm:px-4">
-              {children}
-            </div>
+          {/* Không set nền riêng để ăn nền body */}
+          <main className="w-full px-4 md:px-6 lg:px-10 py-6 bg-transparent">
+            {children}
           </main>
-
-
-          <Footer />
         </Providers>
       </body>
     </html>

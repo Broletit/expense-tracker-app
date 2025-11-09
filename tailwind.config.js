@@ -2,16 +2,15 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/**/*.js", 
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: { gray: { 850: "#1b2430" } },
+    },
   },
   plugins: [],
-  safelist: [
-    {
-      pattern: /(bg|text|ring)-(red|yellow|purple|pink|blue|green|indigo|gray)-(100|500|600)/,
-    },
-  ],
-}
+};
