@@ -1,5 +1,6 @@
 ### Expense Tracker App
-
+    email: thudao01102003@gmail.com
+    password: 01102003
 ### 1. Giới thiệu
 Ứng dụng Expense Tracker là hệ thống quản lý chi tiêu cá nhân được xây dựng bằng Next.js (App Router) kết hợp với SQLite, React Query, Tailwind CSS và Recharts.
 Mục tiêu của ứng dụng là giúp người dùng theo dõi, phân tích và trực quan hóa thu – chi hàng ngày, hàng tháng, quản lý ngân sách, và chia sẻ báo cáo tài chính một cách nhanh chóng, dễ hiểu và bảo mật.
